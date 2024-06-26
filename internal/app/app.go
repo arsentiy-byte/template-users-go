@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"users/internal/config"
+	"users/internal/entities"
 )
 
 type App struct {
@@ -32,6 +33,7 @@ func (a *App) initDeps(ctx context.Context) error {
 	inits := []func(context.Context) error{
 		a.initConfig,
 		a.initServiceProvider,
+		a.migrateDatabase,
 	}
 
 	for _, init := range inits {
@@ -58,4 +60,8 @@ func (a *App) initServiceProvider(_ context.Context) error {
 	a.provider = newProvider(a.cfg)
 
 	return nil
+}
+
+func (a *App) migrateDatabase(_ context.Context) error {
+	return a.provider.Database().Migrate(&entities.User{})
 }

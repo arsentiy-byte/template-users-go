@@ -6,5 +6,5 @@ import (
 
 type Database interface {
 	GetInstance() *gorm.DB
-	Close() error
+	Migrate(dst ...interface{}) error
 }

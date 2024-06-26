@@ -10,7 +10,7 @@ import (
 )
 
 type postgresDatabase struct {
-	Db *gorm.DB
+	db *gorm.DB
 }
 
 var (
@@ -33,12 +33,12 @@ func NewDatabase(cfg config.Storage) (database.Database, error) {
 
 		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
-			onceError = fmt.Errorf("failed to connect database: %w", err)
+			onceError = err
 
 			return
 		}
 
-		dbInstance = &postgresDatabase{Db: db}
+		dbInstance = &postgresDatabase{db: db}
 	})
 
 	if onceError != nil {
@@ -49,9 +49,9 @@ func NewDatabase(cfg config.Storage) (database.Database, error) {
 }
 
 func (p *postgresDatabase) GetInstance() *gorm.DB {
-	return p.Db
+	return p.db
 }
 
-func (p *postgresDatabase) Close() error {
-	return nil
+func (p *postgresDatabase) Migrate(dst ...interface{}) error {
+	return p.db.AutoMigrate(dst...)
 }
