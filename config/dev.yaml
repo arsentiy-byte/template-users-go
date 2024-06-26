@@ -1,0 +1,11 @@
+env: "dev"
+storage:
+  host: "127.0.0.1"
+  port: 5432
+  user: "users_user"
+  password: "users_password"
+  database: "users_db"
+grpc:
+  host: "127.0.0.1"
+  port: 44044
+  timeout: 5s
