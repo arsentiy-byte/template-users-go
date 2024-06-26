@@ -23,7 +23,7 @@ func New(ctx context.Context) (*App, error) {
 }
 
 func (a *App) Run() error {
-	fmt.Println(a.cfg.Env)
+	fmt.Println(a.provider.Database())
 
 	return nil
 }
@@ -55,7 +55,7 @@ func (a *App) initConfig(_ context.Context) error {
 }
 
 func (a *App) initServiceProvider(_ context.Context) error {
-	a.provider = newProvider(a.cfg.Grpc)
+	a.provider = newProvider(a.cfg)
 
 	return nil
 }
