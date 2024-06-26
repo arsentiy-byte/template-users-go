@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"users/internal/config"
-	"users/internal/entities"
+	"users/internal/model"
 )
 
 type App struct {
@@ -63,5 +63,5 @@ func (a *App) initServiceProvider(_ context.Context) error {
 }
 
 func (a *App) migrateDatabase(_ context.Context) error {
-	return a.provider.Database().Migrate(&entities.User{})
+	return a.provider.Database().Migrate(&model.User{})
 }
