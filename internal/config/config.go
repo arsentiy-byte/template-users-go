@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	Env     string  `yaml:"env" env-default:"dev"`
-	Storage Storage `yaml:"storage" env-required:"true"`
-	Grpc    Grpc    `yaml:"grpc" env-required:"true"`
+	Env     string   `yaml:"env" env-default:"dev"`
+	Storage *Storage `yaml:"storage" env-required:"true"`
+	Grpc    *Grpc    `yaml:"grpc" env-required:"true"`
 }
 
 func Load() (*Config, error) {
