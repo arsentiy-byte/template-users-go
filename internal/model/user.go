@@ -21,14 +21,12 @@ type User struct {
 }
 
 func NewUser(
-	id uint64,
 	firstName string,
 	lastName string,
 	email string,
 	password string,
 ) *User {
 	return &User{
-		Id:        id,
 		FirstName: firstName,
 		LastName:  lastName,
 		Email:     email,
@@ -42,12 +40,10 @@ func (u *User) Update(
 	firstName string,
 	lastName string,
 	email string,
-	password string,
 ) {
 	u.FirstName = firstName
 	u.LastName = lastName
 	u.Email = email
-	u.Password = password
 	u.UpdatedAt = time.Now().UTC()
 }
 

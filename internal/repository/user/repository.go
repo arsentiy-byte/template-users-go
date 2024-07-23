@@ -5,20 +5,21 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"users/internal/model"
+	base "users/internal/repository"
 	"users/pkg/database"
 )
 
-type Repository struct {
+type repository struct {
 	db database.Database
 }
 
-func NewRepository(db database.Database) *Repository {
-	return &Repository{
+func NewRepository(db database.Database) base.UserRepository {
+	return &repository{
 		db: db,
 	}
 }
 
-func (r *Repository) List(ctx context.Context, paging model.Paging) ([]model.User, int64, error) {
+func (r *repository) List(ctx context.Context, paging model.Paging) ([]model.User, int64, error) {
 	var users []model.User
 
 	query := r.db.GetInstance().Model(&model.User{})
@@ -41,7 +42,7 @@ func (r *Repository) List(ctx context.Context, paging model.Paging) ([]model.Use
 	return users, totalCount, nil
 }
 
-func (r *Repository) GetById(ctx context.Context, id uint) (*model.User, error) {
+func (r *repository) GetById(ctx context.Context, id uint64) (*model.User, error) {
 	var user model.User
 
 	if err := r.db.GetInstance().WithContext(ctx).Where("id = ?", id).First(&user).Error; err != nil {
@@ -55,7 +56,7 @@ func (r *Repository) GetById(ctx context.Context, id uint) (*model.User, error) 
 	return &user, nil
 }
 
-func (r *Repository) Create(ctx context.Context, user *model.User) (uint64, error) {
+func (r *repository) Create(ctx context.Context, user *model.User) (uint64, error) {
 	if err := r.db.GetInstance().WithContext(ctx).Create(user).Error; err != nil {
 		return 0, err
 	}
@@ -63,7 +64,7 @@ func (r *Repository) Create(ctx context.Context, user *model.User) (uint64, erro
 	return user.Id, nil
 }
 
-func (r *Repository) Update(ctx context.Context, user *model.User) error {
+func (r *repository) Update(ctx context.Context, user *model.User) error {
 	if err := r.db.GetInstance().WithContext(ctx).Save(user).Error; err != nil {
 		return err
 	}
@@ -71,7 +72,7 @@ func (r *Repository) Update(ctx context.Context, user *model.User) error {
 	return nil
 }
 
-func (r *Repository) ForceDelete(ctx context.Context, id uint) error {
+func (r *repository) ForceDelete(ctx context.Context, id uint64) error {
 	if err := r.db.GetInstance().WithContext(ctx).Delete(&model.User{}, id).Error; err != nil {
 		return err
 	}
